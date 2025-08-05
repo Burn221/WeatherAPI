@@ -3,6 +3,7 @@ package com.nikitanevmyvaka.weatherapi.Service;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.nikitanevmyvaka.weatherapi.dto.HistoryDTO;
 import com.nikitanevmyvaka.weatherapi.repository.DatabaseHistory;
 
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class APIService {
 
     }
 
-    public void displayWeatherData(double latitude, double longitude,String city){
+    public HistoryDTO displayWeatherData(double latitude, double longitude, String city){
         try {
 
             String urlWeatherAddres = "https://api.open-meteo.com/v1/forecast?latitude="+latitude+"&longitude="+longitude+"&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,is_day,rain";
@@ -65,7 +66,7 @@ public class APIService {
             HttpURLConnection apiConnection = fetchApiConnection(urlWeatherAddres);
             if (apiConnection.getResponseCode()!=200 ){
                 System.out.println("Error while connecting to API");
-                return;
+                return null;
             }
             String apiJson= getApiJson(apiConnection);
 
@@ -79,31 +80,27 @@ public class APIService {
 
 
             String time= currentWeather.get("time").getAsString();
-            System.out.println("Current time: "+time);
+
 
             double temperature= currentWeather.get("temperature_2m").getAsDouble();
-            System.out.println("Current temperature: "+ temperature+"°C");
+
 
             long relativeHumidity = currentWeather.get("relative_humidity_2m").getAsLong();
-            System.out.println("Relative Humidity: " + relativeHumidity+"%");
+
 
             double windSpeed= currentWeather.get("wind_speed_10m").getAsDouble();
-            System.out.println("Wind speed: "+ windSpeed+" km/h");
+
 
             String windDirection= currentWeather.get("wind_direction_10m").getAsString();
-            System.out.println("Wind direction is: "+windDirection+"°");
 
-            double isRain= currentWeather.get("rain").getAsDouble();
-            System.out.println("Rain: "+isRain+" mm");
+            return new HistoryDTO(city,latitude,longitude, time, temperature,relativeHumidity,windSpeed);
 
-            System.out.println();
-
-            history.insertDatabaseHistory(latitude,longitude,city,time,temperature,relativeHumidity,windSpeed,isRain);
 
 
         }
         catch (Exception e){
             System.out.println("Error while getting weather data "+ e.getMessage());
+            return null;
 
         }
     }
