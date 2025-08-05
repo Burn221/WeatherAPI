@@ -1,5 +1,7 @@
 package com.nikitanevmyvaka.weatherapi.repository;
 
+import com.nikitanevmyvaka.weatherapi.dto.HistoryDTO;
+
 import java.sql.*;
 
 public class DatabaseHistory {
@@ -8,19 +10,19 @@ public class DatabaseHistory {
     String user = "postgres";
     String password = "1234";
 
-    public void insertDatabaseHistory(double latitude,double longitude,String city,String time,double temperature, long relativeHumidity, double windSpeed,double isRain){
-        String sql= "INSERT INTO history (city, latitude, longitude, temperature, windspeed, humidity, rain, time)"+"" +
-                "VALUES(?,?,?,?,?,?,?,?)";
+    public void insertDatabaseHistory(HistoryDTO dto){
+        String sql= "INSERT INTO history (city, latitude, longitude, temperature, windspeed, humidity, time)" +
+                "VALUES(?,?,?,?,?,?,?)";
         try(Connection conn= DriverManager.getConnection(url,user,password)){
             try(PreparedStatement pst= conn.prepareStatement(sql)){
-                pst.setString(1,city);
-                pst.setDouble(2,latitude);
-                pst.setDouble(3,longitude);
-                pst.setDouble(4,temperature);
-                pst.setDouble(5,windSpeed);
-                pst.setLong(6,relativeHumidity);
-                pst.setDouble(7,isRain);
-                pst.setString(8,time);
+                pst.setString(1,dto.getCity());
+                pst.setDouble(2,dto.getLatitude());
+                pst.setDouble(3,dto.getLongitude());
+                pst.setDouble(4,dto.getTemperature());
+                pst.setDouble(5,dto.getWindspeed());
+                pst.setLong(6,dto.getRelativeHumidity());
+
+                pst.setString(7,dto.getTime());
 
                 pst.executeUpdate();
 
