@@ -22,7 +22,7 @@ public class CLI {
                 double latitude= cityData.get("latitude").getAsDouble();
                 double longitude= cityData.get("longitude").getAsDouble();
 
-                service.displayWeatherData(latitude,longitude);
+                service.displayWeatherData(latitude,longitude,city);
 
 
 
