@@ -33,3 +33,18 @@ Weather API CLI
 -JDBC (java.sql.*)
 
 -PostgreSQL (локальная БД)
+
+---
+
+Структура проекта
+---
+
+src
+└── main
+    ├── java/com/nikitanevmyvaka/weatherapi
+    │   ├── Main.java                     # точка входа (CLI)
+    │   ├── Interface/CLI.java            # консольный интерфейс (меню, ввод/вывод)
+    │   ├── Service/APIService.java       # HTTP-запрос к провайдеру + парсинг JSON
+    │   ├── dto/HistoryDTO.java           # данные для сохранения в БД
+    │   └── repository/DatabaseHistory.java # сохранение истории (JDBC)
+    └── resources/
